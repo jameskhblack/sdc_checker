@@ -34,6 +34,8 @@ os.environ["STATA_EDITION"] = 'mp'
 # Import python scripts
 sys.path.append(r"<python_script_folder>") # Location of stata_to_df script folder
 sys.path.append(r"<python_script_folder>") # Location of sdc_checker script folder
+sys.path.append(r"<python_library>") # Location of pydantic and any other requirements that are not installed
+import pydantic
 from stata_to_df import stata_to_df
 from sdc_checker import generate_data, generate_sdc
 end
@@ -80,6 +82,3 @@ Our approach should be consistent with the methods used by ONS Annual Survey of 
 * openpyxl 3.1.5
 * pandas 2.2.3
 * pydantic 2.11.1
-* pydantic_core 2.33.0
-* typing_extensions 4.12.2
-* typing-inspection 0.4.0
