@@ -254,12 +254,17 @@ def apply_styles(workbook: Workbook,
                      continue # Skip to next row if index is out of bounds
 
         elif table_type == 'primary' and max_row >= data_row_start and max_col >= data_col_start:
-             for r_idx in range(data_row_start, max_row + 1):
-                 for c_idx in range(data_col_start, max_col + 1):
+            # Determine number format based on statistic
+            primary_num_format = FORMAT_NUMBER_1DP # Default for sum/median
+            if config.statistic == 'count':
+                primary_num_format = FORMAT_INTEGER
+
+            for r_idx in range(data_row_start, max_row + 1):
+                for c_idx in range(data_col_start, max_col + 1):
                     try: # Add try-except for cell access
                         cell = worksheet.cell(row=r_idx, column=c_idx)
                         if isinstance(cell.value, (int, float, np.number)) and not pd.isna(cell.value):
-                             cell.number_format = FORMAT_NUMBER_1DP
+                             cell.number_format = primary_num_format
                     except IndexError:
                          logger.warning(f"IndexError accessing cell at row {r_idx}, col {c_idx} during primary number formatting.")
                          continue # Skip to next cell in row if index is out of bounds

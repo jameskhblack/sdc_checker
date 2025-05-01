@@ -37,13 +37,13 @@ def _replace_nan_in_multiindex(index: pd.MultiIndex) -> pd.MultiIndex:
 def _agg_wrapper(group: pd.DataFrame, value_col: str, weight_col: Optional[str], statistic: str) -> Any:
     """
     Internal wrapper to apply the correct aggregation based on config.
-    Handles weighted/unweighted sum/median and all-NaN cases.
+    Handles weighted/unweighted sum/median/count and all-NaN cases.
 
     Args:
         group: The DataFrame group from groupby().
         value_col: The name of the value column.
         weight_col: The name of the weight column, if any.
-        statistic: 'sum' or 'median'.
+        statistic: 'sum', 'median', or 'count'.
 
     Returns:
         The calculated aggregate value, or np.nan.
@@ -96,6 +96,32 @@ def _agg_wrapper(group: pd.DataFrame, value_col: str, weight_col: Optional[str],
         else:
             # Unweighted Median: Pandas median handles skipna and returns NaN for all-NaN
             return values.median(skipna=True)
+        
+    elif statistic == 'count':
+        # Identify non-NaN values
+        valid_values_mask = values.notna()
+
+        # All values are NaN, return count 0
+        if not valid_values_mask.any():
+            return 0
+        
+        # Weighted Count: Count non-NaN values in the weight column
+        if weight_col is not None and weights is not None:
+            # Combine masks for valid values and valid weights
+            valid_weights_mask = weights.notna()
+            combined_mask = valid_values_mask & valid_weights_mask
+
+            # No observations have both a valid value and a valid weight
+            if not combined_mask.any():
+                return 0
+
+            # WEIGHTED COUNT of non-NaN values.
+            else:
+                return weights[combined_mask].sum()
+        # RETURN UNWEIGHTED COUNT of non-NaN values.
+        else:
+            return valid_values_mask.sum()
+
     else:
         # Should be caught by config validation, but raise error just in case
         raise CalculationError(f"Unsupported statistic type '{statistic}' in _agg_wrapper.")

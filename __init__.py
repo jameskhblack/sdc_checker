@@ -73,7 +73,8 @@ def generate_data(config_dict: Dict[str, Any], input_df: pd.DataFrame = None) ->
         logger.info("Writing primary statistic table to Excel sheet...")
 
         # 4a. Construct Title
-        primary_title_text = f"Raw Output: {config.value_var}, row_var: {', '.join(config.row_var)}, col_var: {', '.join(config.col_var)}"
+        stat_desc = config.statistic.capitalize()
+        primary_title_text = f"Raw Output: {stat_desc} of {config.value_var}, row_var: {', '.join(config.row_var)}, col_var: {', '.join(config.col_var)}"
         if config.pweight: # Check if pweight is not None or empty
             primary_title_text += f", weighted by {config.pweight}"
 

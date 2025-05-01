@@ -20,7 +20,7 @@ class ConfigModel(BaseModel):
     row_var: List[str] = Field(..., min_length=1)
     col_var: List[str] = Field(..., min_length=1)
     value_var: str
-    statistic: Literal["sum", "median"]
+    statistic: Literal["sum", "median", "count"]
     sdc_rules: SDCRules
     output: str # Basic validation, more complex path validation might be OS-dependent
     

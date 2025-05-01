@@ -10,7 +10,7 @@ Two packages are included:
 ## Config
 Add an example here
 And say what is optional.
-Mention that "sum" and "median" are thye only supported statistics.
+Mention that "sum", "median" and "count" are the only supported statistics.
 
 * 1x0 or 0x1 dimension tables are not supported. If you wish to use these, perhaps try creating a new variable with a single value and using that as the extra dimension.
 

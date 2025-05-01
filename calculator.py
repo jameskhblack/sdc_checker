@@ -503,9 +503,9 @@ def calculate_sdc_indicators(df: pd.DataFrame, config: ConfigModel) -> pd.DataFr
                         sdc_table_base = pd.DataFrame(index=current_index, columns=expected_cols_index, dtype=float)
 
 
-        # 9. Handle 'median' statistic case AFTER unstacking and reindexing columns
-        if config.statistic == "median":
-            logger.info("Statistic is 'median', keeping only 'Count' indicator row.")
+        # 9. Handle 'median' and 'count' statistic case AFTER unstacking and reindexing columns
+        if config.statistic == "median" or config.statistic == "count":
+            logger.info(f"Statistic is '{config.statistic}', keeping only 'Count' indicator row.")
             # Check if index is MultiIndex and has the indicator level
             if isinstance(sdc_table_base.index, pd.MultiIndex) and indicator_level_name in sdc_table_base.index.names:
                 try:
