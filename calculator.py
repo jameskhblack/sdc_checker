@@ -48,6 +48,8 @@ def calculate_primary_statistic(df: pd.DataFrame, config: ConfigModel) -> pd.Dat
     logger.debug(f"  Include Aggregated: {config.include_aggregated}")
 
     try:
+        # Pre-aggregate if secondary_ref is specified (mirrors calculate_sdc_indicators)
+        df = _pre_aggregate_secondary_ref(df.copy(), config)
         # --- Main Pivot Calculation using Groupby + Apply + Unstack ---
         group_by_vars = config.row_var + config.col_var
         logger.debug(f"Grouping by: {group_by_vars}")
@@ -132,7 +134,7 @@ def calculate_primary_statistic(df: pd.DataFrame, config: ConfigModel) -> pd.Dat
                 logger.debug("Calling _add_hierarchical_aggregates for columns (axis=1)...")
                 pivot_table_with_agg = _add_hierarchical_aggregates( # This is the primary stat agg func
                     base_df=pivot_table_with_agg,
-                    original_df=df, # Pass the original unfiltered DataFrame
+                    original_df=df, # Pass the potentially pre-aggregated DataFrame
                     config=config,
                     axis=1,
                     vars_on_axis=config.col_var,
@@ -147,7 +149,7 @@ def calculate_primary_statistic(df: pd.DataFrame, config: ConfigModel) -> pd.Dat
             logger.debug("Calling _fill_aggregate_intersections...")
             pivot_table_with_agg = _fill_aggregate_intersections(
                 df=pivot_table_with_agg,
-                df_orig=df, # Pass original df
+                df_orig=df, # Pass potentially pre-aggregated df
                 config=config,
                 agg_label=agg_label
             )

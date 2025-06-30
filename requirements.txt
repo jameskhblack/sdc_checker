@@ -1,3 +1,5 @@
+# Version 1.0.1
+# Tested with Python 3.11.9
 pandas==2.2.3
 numpy==2.2.3
 openpyxl==3.1.5
