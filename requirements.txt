@@ -1,4 +1,4 @@
-# Version 1.0.1
+# Version 1.0.2
 # Tested with Python 3.11.9
 pandas==2.2.3
 numpy==2.2.3
