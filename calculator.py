@@ -119,7 +119,7 @@ def calculate_primary_statistic(df: pd.DataFrame, config: ConfigModel) -> pd.Dat
                 logger.debug("Calling _add_hierarchical_aggregates for rows (axis=0)...")
                 pivot_table_with_agg = _add_hierarchical_aggregates( # This is the primary stat agg func
                     base_df=pivot_table_with_agg,
-                    original_df=df, # Pass the original unfiltered DataFrame
+                    original_df=df, # Pass the potentially pre-aggregated DataFrame
                     config=config,
                     axis=0,
                     vars_on_axis=config.row_var,
